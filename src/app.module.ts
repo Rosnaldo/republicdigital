@@ -3,6 +3,7 @@ import { UserModule } from './module/user/user.module'
 import { BcryptService } from './service/bcrypt.service'
 import { ConfigModule } from '@nestjs/config'
 import { LoggerModule } from 'nestjs-pino'
+import { AccountModule } from './module/account/account.module'
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import { LoggerModule } from 'nestjs-pino'
       }
     }), 
     ConfigModule.forRoot(),
-    UserModule
+    UserModule,
+    AccountModule,
   ],
   controllers: [],
   providers: [BcryptService],

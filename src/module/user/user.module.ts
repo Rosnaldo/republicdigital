@@ -1,25 +1,25 @@
 import { Module } from '@nestjs/common'
+import { PrismaService } from 'src/service/prisma.service'
+
 import { UserGetOneRepository } from './repository/get-one-repository'
-import { UserGetOneController } from './controller/get-one.controller'
 import { UserInsertOneRepository } from './repository/insert-one-repository'
 import { ValidateCPFService } from './service/cpf-validate'
-import { UserRegisterController } from './controller/register.controller'
-import { PrismaService } from 'src/service/prisma.service'
-import { BcryptService } from 'src/service/bcrypt.service'
+import { UserRegisterUsecase } from './use-case/register.use-case'
 
 @Module({
   imports: [],
-  controllers: [
-    UserGetOneController,
-    UserRegisterController,
-  ],
+  controllers: [],
   providers: [
     PrismaService,
-    BcryptService,
+    UserRegisterUsecase,
     UserGetOneRepository,
     UserInsertOneRepository,
     ValidateCPFService,
   ],
-  exports: []
+  exports: [
+    UserRegisterUsecase,
+    UserInsertOneRepository,
+    ValidateCPFService,
+  ]
 })
 export class UserModule {}

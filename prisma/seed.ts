@@ -1,12 +1,11 @@
-import { PrismaClient, User } from '@prisma/client'
+import { Prisma, PrismaClient, User } from '@prisma/client'
 const prisma = new PrismaClient()
 
 async function main() {
   const user = await prisma.user.create({
     data: {
       name: 'AndreY Kenji Tsuzuki',
-      cpf: '94795967253',
-      password: 'Jbfyu63nd'
+      cpf: '94795967253'
     }
   })
 
@@ -14,14 +13,14 @@ async function main() {
     data: {
       name: 'Dodo Aca',
       cpf: '94795967252',
-      password: 'Hudy632'
     }
   })
 
   const account = await prisma.account.create(
     {
       data: {
-        userId: user.id
+        userId: user.id,
+        password: '558833'
       }
     }
   )
@@ -29,7 +28,8 @@ async function main() {
   const account2 = await prisma.account.create(
     {
       data: {
-        userId: user2.id
+        userId: user2.id,
+        password: '420033'
       }
     }
   )
