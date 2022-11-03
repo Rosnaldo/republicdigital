@@ -4,6 +4,7 @@ import { BcryptService } from './service/bcrypt.service'
 import { ConfigModule } from '@nestjs/config'
 import { LoggerModule } from 'nestjs-pino'
 import { AccountModule } from './module/account/account.module'
+import { TransferModule } from './module/transfer/transfer.module'
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AccountModule } from './module/account/account.module'
     ConfigModule.forRoot(),
     UserModule,
     AccountModule,
+    TransferModule,
   ],
   controllers: [],
   providers: [BcryptService],
