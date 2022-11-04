@@ -1,18 +1,19 @@
 import { Module } from '@nestjs/common'
 
-import { BcryptService } from 'src/service/bcrypt.service'
 import { PrismaService } from 'src/service/prisma.service'
 import { AccountModule } from '../account/account.module'
+import { TransactionModule } from '../transaction/transaction.module'
 import { TransferCreateController } from './controller/create.controller'
 import { TransferInsertOneRepository } from './repository/insert-one-repository'
+import { TransferCreateUsecase } from './use-case/create.use-case'
 
 @Module({
-  imports: [AccountModule],
+  imports: [AccountModule, TransactionModule],
   controllers: [TransferCreateController],
   providers: [
     PrismaService,
     TransferInsertOneRepository,
-    BcryptService,
+    TransferCreateUsecase,
   ],
   exports: []
 })

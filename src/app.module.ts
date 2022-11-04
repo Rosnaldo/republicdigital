@@ -3,8 +3,11 @@ import { UserModule } from './module/user/user.module'
 import { BcryptService } from './service/bcrypt.service'
 import { ConfigModule } from '@nestjs/config'
 import { LoggerModule } from 'nestjs-pino'
+
 import { AccountModule } from './module/account/account.module'
 import { TransferModule } from './module/transfer/transfer.module'
+import { DepositModule } from './module/deposit/deposit.module'
+import { TransactionModule } from './module/transaction/transaction.module'
 
 @Module({
   imports: [
@@ -17,6 +20,8 @@ import { TransferModule } from './module/transfer/transfer.module'
     UserModule,
     AccountModule,
     TransferModule,
+    DepositModule,
+    TransactionModule,
   ],
   controllers: [],
   providers: [BcryptService],

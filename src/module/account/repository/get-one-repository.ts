@@ -8,7 +8,7 @@ export class AccountGetOneRepository {
 
   async execute(
     where: Prisma.AccountWhereUniqueInput,
-    include: Prisma.AccountInclude,
+    include: Prisma.AccountInclude = { user: true },
   ): Promise<Account | null> {
 
     return this.prisma.account.findFirst({

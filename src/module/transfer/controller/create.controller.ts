@@ -1,61 +1,45 @@
 import { ApiTags } from '@nestjs/swagger'
-import { BadRequestException, Body, Controller, Post, UsePipes, ValidationPipe } from '@nestjs/common'
-import { Transfer } from '@prisma/client'
+import { BadRequestException, Body, Controller, Logger, Post, UsePipes, ValidationPipe } from '@nestjs/common'
+import { Transaction } from '@prisma/client'
 
 import { TransferCreateDto } from '../swagger-dto/create.dto'
-import { TransferInsertOneRepository } from '../repository/insert-one-repository'
 import { AccountGetOneRepository } from 'src/module/account/repository/get-one-repository'
-import { BcryptService } from 'src/service/bcrypt.service'
+import { TransactionValidateUsecase } from 'src/module/transaction/use-case/validate.use-case'
+import { TransferCreateUsecase } from '../use-case/create.use-case'
 
 @ApiTags('transfer')
 @UsePipes(ValidationPipe)
 @Controller('transfer')
 export class TransferCreateController {
+  private readonly logger = new Logger(TransferCreateController.name)
+
   constructor(
-    private bcrypt: BcryptService,
+    private transactionValidateUsecase: TransactionValidateUsecase,
     private accountGetOneRepository: AccountGetOneRepository,
-    private transferInsertOneRepository: TransferInsertOneRepository,
+    private transferCreateUsecase: TransferCreateUsecase,
   ) {}
 
   @Post('create')
   async execute(
     @Body() body: TransferCreateDto,
-  ): Promise<Transfer> {
-    if (Number(body.amount) <= 0) {
-      throw new BadRequestException('quantidade deve ser maior que zero')  
-    }
+  ): Promise<Transaction> {
+    const sender = await this.transactionValidateUsecase.execute(body)
 
-    const sender = await this.accountGetOneRepository.execute({
-      userId: body.senderAccountId
-    }, {
-      user: true
-    })
-
-    if (sender === null) {
-      throw new BadRequestException('senderAccountId não existe')      
-    }
-
-    if (!await this.bcrypt.check(body.password, sender.password)) {
-      throw new BadRequestException('senha incorreta')  
-    }
-
-    if (sender.credit <= body.amount) {
+    if (sender.credit < body.amount) {
       throw new BadRequestException('saldo insuficiente')  
     }
 
     const recipient = await this.accountGetOneRepository.execute({
-      userId: body.recipientAccountId
-    }, {
-      user: true
+      id: body.recipientAccountId
     })
 
     if (recipient === null) {
       throw new BadRequestException('recipientAccountId não existe')      
     }
 
-    const { password, ...bodyWithoutPassword } = body
+    const { password, transferTime, ...bodyWithoutPassword } = body
 
-    return this.transferInsertOneRepository.execute(
+    return this.transferCreateUsecase.execute(
       bodyWithoutPassword
     )
   }

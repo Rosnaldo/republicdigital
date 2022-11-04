@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -25,16 +22,31 @@ model Account {
   user   User   @relation(fields: [userId], references: [id])
   credit String @default("0")
   password String
+  transactions  Transaction[]
+
+  createdAt DateTime @default(now())
+}
+
+model Transaction {
+  id                 String   @id @default(uuid())
+  accountId          String
+  account            Account  @relation(fields: [accountId], references: [id])
+  amount             String
+  type               String
+  entity             String
 
   createdAt DateTime @default(now())
 }
 
 model Transfer {
   id                 String   @id @default(uuid())
-  senderAccountId    String
   recipientAccountId String
-  amount             String
-  transferTime       DateTime
+
+  createdAt DateTime @default(now())
+}
+
+model Deposit {
+  id                 String   @id @default(uuid())
 
   createdAt DateTime @default(now())
 }

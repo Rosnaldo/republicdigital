@@ -7,6 +7,7 @@ import { AccountCreateController } from './controller/create.controller'
 import { AccountInsertOneRepository } from './repository/insert-one-repository'
 import { BcryptService } from 'src/service/bcrypt.service'
 import { AccountGetOneRepository } from './repository/get-one-repository'
+import { AccountCreateUsecase } from './use-case/create.use-case'
 
 @Module({
   imports: [UserModule],
@@ -19,6 +20,7 @@ import { AccountGetOneRepository } from './repository/get-one-repository'
     UserRegisterUsecase,
     BcryptService,
     AccountGetOneRepository,
+    AccountCreateUsecase,
   ],
   exports: [AccountGetOneRepository]
 })
