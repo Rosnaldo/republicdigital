@@ -34,6 +34,7 @@ model Transaction {
   amount             String
   type               String
   entity             String
+  transferTime       DateTime
 
   createdAt DateTime @default(now())
 }

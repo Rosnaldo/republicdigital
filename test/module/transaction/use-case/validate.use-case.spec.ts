@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing'
 import { BadRequestException, Logger } from '@nestjs/common'
 
 import { PrismaService } from 'src/service/prisma.service'
-import { MockAccount, MockAccountWithUser } from 'src/mock/account'
+import { MockAccountWithUser } from 'src/mock/account'
 import { TransactionValidateUsecase } from 'src/module/transaction/use-case/validate.use-case'
 import { AccountGetOneRepository } from 'src/module/account/repository/get-one-repository'
 import { BcryptService } from 'src/service/bcrypt.service'

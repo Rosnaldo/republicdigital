@@ -1,6 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger'
 import { Transaction, Account } from '@prisma/client'
-import { IsNumberString, IsUUID } from 'class-validator'
+import { IsDateString, IsNumberString, IsUUID } from 'class-validator'
 
 type TransactionOmit = Omit<Transaction, 'id' | 'type' | 'entity' | 'createdAt'>
 type AccountPassword = Pick<Account, 'password'>
@@ -19,6 +19,12 @@ export class TransactionValidateDto implements TransferType {
   })
   @IsNumberString()
   amount: string
+
+  @ApiProperty({
+    type: Date,
+  })
+  @IsDateString()
+  transferTime: Date
 
   @ApiProperty({
     type: String,

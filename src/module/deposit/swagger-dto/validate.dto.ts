@@ -21,7 +21,7 @@ export class DepositCreateDto implements DepositType {
   amount: string
 
   @ApiProperty({
-    type: String,
+    type: Date,
   })
   @IsDateString()
   transferTime: Date

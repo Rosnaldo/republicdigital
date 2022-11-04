@@ -6,6 +6,7 @@ import { TransferCreateDto } from '../swagger-dto/create.dto'
 import { AccountGetOneRepository } from 'src/module/account/repository/get-one-repository'
 import { TransactionValidateUsecase } from 'src/module/transaction/use-case/validate.use-case'
 import { TransferCreateUsecase } from '../use-case/create.use-case'
+import { AccountUpdateOneRepository } from 'src/module/account/repository/update-one-repository'
 
 @ApiTags('transfer')
 @UsePipes(ValidationPipe)
@@ -17,6 +18,7 @@ export class TransferCreateController {
     private transactionValidateUsecase: TransactionValidateUsecase,
     private accountGetOneRepository: AccountGetOneRepository,
     private transferCreateUsecase: TransferCreateUsecase,
+    private accountUpdateOneRepository: AccountUpdateOneRepository,
   ) {}
 
   @Post('create')
@@ -37,10 +39,29 @@ export class TransferCreateController {
       throw new BadRequestException('recipientAccountId não existe')      
     }
 
-    const { password, transferTime, ...bodyWithoutPassword } = body
+    const { password, ...bodyWithoutPassword } = body
 
-    return this.transferCreateUsecase.execute(
-      bodyWithoutPassword
+    const transfer = await this.transferCreateUsecase.execute(
+      {
+        ...bodyWithoutPassword,
+        transferTime: new Date(bodyWithoutPassword.transferTime)
+      }
     )
+
+    const newSenderCredit = String(Number(sender.credit) - Number(body.amount))
+    await this.accountUpdateOneRepository.execute({
+      id: sender.id
+    }, {
+      credit: newSenderCredit
+    })
+
+    const newRecipientCredit = String(Number(recipient.credit) + Number(body.amount))
+    await this.accountUpdateOneRepository.execute({
+      id: recipient.id
+    }, {
+      credit: newRecipientCredit
+    })
+
+    return transfer
   }
 }

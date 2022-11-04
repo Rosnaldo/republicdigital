@@ -4,7 +4,7 @@ import { Transaction } from '@prisma/client'
 import { TransactionInsertOneRepository } from 'src/module/transaction/repository/insert-one-repository'
 import { DepositInsertOneRepository } from '../repository/insert-one-repository'
 
-type CreateDepositBodyType = Pick<Transaction, 'accountId' | 'amount'>
+type CreateDepositBodyType = Pick<Transaction, 'accountId' | 'amount' | 'transferTime'>
 
 @Injectable()
 export class DepositCreateUsecase {
@@ -28,6 +28,7 @@ export class DepositCreateUsecase {
         amount: body.amount,
         entity: deposit.id,
         type: 'deposit',
+        transferTime: body.transferTime,
       }
     )
   }

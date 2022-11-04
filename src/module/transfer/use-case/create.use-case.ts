@@ -6,7 +6,7 @@ import { TransferInsertOneRepository } from '../repository/insert-one-repository
 
 type CreateTransferBodyType =
   Pick<Transfer, 'recipientAccountId'>
-  & Pick<Transaction, 'accountId' | 'amount'>
+  & Pick<Transaction, 'accountId' | 'amount' | 'transferTime'>
 
 @Injectable()
 export class TransferCreateUsecase {
@@ -32,6 +32,7 @@ export class TransferCreateUsecase {
         amount: body.amount,
         entity: transfer.id,
         type: 'transfer',
+        transferTime: body.transferTime,
       }
     )
   }

@@ -8,6 +8,7 @@ import { TransferCreateController } from 'src/module/transfer/controller/create.
 import { AccountGetOneRepository } from 'src/module/account/repository/get-one-repository'
 import { TransactionValidateUsecase } from 'src/module/transaction/use-case/validate.use-case'
 import { TransferCreateUsecase } from 'src/module/transfer/use-case/create.use-case'
+import { AccountUpdateOneRepository } from 'src/module/account/repository/update-one-repository'
 
 
 let controller
@@ -20,6 +21,10 @@ const mockAccountGetOneRepository = {
 }
 
 const mockTransferCreateUsecase = {
+  execute: jest.fn(),
+}
+
+const mockAccountUpdateOneRepository = {
   execute: jest.fn(),
 }
 
@@ -37,7 +42,15 @@ const Sut = (account2 = mockAccount2) => {
   const spyAccountGetOneRepository = jest.spyOn(mockAccountGetOneRepository, 'execute')
     .mockResolvedValue(account2)
 
-  return { spyAccountGetOneRepository, spyTransactionValidateUsecase, spyTransferCreateUsecase }
+  const spyAccountUpdateOneRepository = jest.spyOn(mockAccountUpdateOneRepository, 'execute')
+    .mockResolvedValue(null)
+
+  return {
+    spyAccountGetOneRepository,
+    spyTransactionValidateUsecase,
+    spyTransferCreateUsecase,
+    spyAccountUpdateOneRepository,
+  }
 }
 
 describe('TransferCreateController', () => {
@@ -48,6 +61,7 @@ describe('TransferCreateController', () => {
         TransactionValidateUsecase,
         AccountGetOneRepository,
         TransferCreateUsecase,
+        AccountUpdateOneRepository,
         PrismaService,
       ],
     })
@@ -58,6 +72,8 @@ describe('TransferCreateController', () => {
       .useValue(mockAccountGetOneRepository)
       .overrideProvider(TransactionValidateUsecase)
       .useValue(mockTransactionValidateUsecase)
+      .overrideProvider(AccountUpdateOneRepository)
+      .useValue(mockAccountUpdateOneRepository)
       .compile()
 
     controller = module.get<TransferCreateController>(TransferCreateController)
@@ -84,6 +100,7 @@ describe('TransferCreateController', () => {
       spyAccountGetOneRepository,
       spyTransactionValidateUsecase,
       spyTransferCreateUsecase,
+      spyAccountUpdateOneRepository,
     } = Sut()
   
     const response = await controller.execute(body)
@@ -96,6 +113,18 @@ describe('TransferCreateController', () => {
       senderAccountId: '5d666862-01ad-40b5-b9ac-4332a8dd4191',
       recipientAccountId: '8b61d335-4387-42f4-bdb8-ebb2e3cf970a',
       amount: '10000',
+      transferTime: new Date('2022-11-03T16:53:41.756Z')
+    })
+
+    expect(spyAccountUpdateOneRepository).toHaveBeenNthCalledWith(1, {
+      id: '8b61d335-4387-42f4-bdb8-ebb2e3cf970a'
+    }, {
+      credit: '1990000'
+    })
+    expect(spyAccountUpdateOneRepository).toHaveBeenNthCalledWith(2, {
+      id: 'e9547a13-f21a-4077-80d0-1ad597d94517'
+    }, {
+      credit: '2010000'
     })
 
     expect(response).toEqual(mockTransaction)

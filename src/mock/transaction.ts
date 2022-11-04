@@ -6,6 +6,7 @@ export const MockTransactionTranfer = (): Transaction => ({
   amount: '20000',
   type: 'transfer',
   entity: '8b61d335-4387-42f4-bdb8-ebb2e3cf970a',
+  transferTime: new Date(),
   createdAt: new Date(),
 })
 
@@ -16,5 +17,6 @@ export const MockTransactionDeposit = (): Transaction => ({
   amount: '20000',
   type: 'deposit',
   entity: '8b61d335-4387-42f4-bdb8-ebb2e3cf970a',
+  transferTime: new Date(),
   createdAt: new Date(),
 })

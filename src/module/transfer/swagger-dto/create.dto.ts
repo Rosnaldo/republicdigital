@@ -27,7 +27,7 @@ export class TransferCreateDto implements TransferType {
   amount: string
 
   @ApiProperty({
-    type: String,
+    type: Date,
   })
   @IsDateString()
   transferTime: Date

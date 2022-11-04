@@ -4,6 +4,7 @@ CREATE TABLE "Transaction" (
     "amount" TEXT NOT NULL,
     "type" TEXT NOT NULL,
     "entity" TEXT NOT NULL,
+    "transferTime" DATETIME NOT NULL,
     "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT "Transaction_accountId_fkey" FOREIGN KEY ("accountId") REFERENCES "Account" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
 );

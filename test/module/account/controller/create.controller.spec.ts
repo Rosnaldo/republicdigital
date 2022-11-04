@@ -72,17 +72,6 @@ describe('AccountCreateController', () => {
       password: '423300',
       userId: '5d666862-01ad-40b5-b9ac-4332a8dd4191'
     })
-    // expect(spyBcryptService).toHaveBeenCalledWith(body.password)
-    // expect(spyAccountInsertOneRepository).toHaveBeenCalledWith({
-    //   user: {
-    //     connect: {
-    //       id: mockUser.id,
-    //     }
-    //   },
-    //   password: 'encodedPassword'
-    // }, {
-    //   user: true
-    // })
     expect(response).toEqual(mockAccountWithUser)
   })
 })
