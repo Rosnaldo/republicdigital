@@ -136,7 +136,7 @@ describe('TransferCreateController', () => {
     const body = {
       senderAccountId: '5d666862-01ad-40b5-b9ac-4332a8dd4191',
       recipientAccountId: '8b61d335-4387-42f4-bdb8-ebb2e3cf970a',
-      amount: '300000',
+      amount: '3000000000',
       transferTime: '2022-11-03T16:53:41.756Z',
       password: '553276',
     }

@@ -27,7 +27,7 @@ export class TransferCreateController {
   ): Promise<Transaction> {
     const sender = await this.transactionValidateUsecase.execute(body)
 
-    if (sender.credit < body.amount) {
+    if (Number(sender.credit) < Number(body.amount)) {
       throw new BadRequestException('saldo insuficiente')  
     }
 
